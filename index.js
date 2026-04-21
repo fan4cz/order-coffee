@@ -4,7 +4,7 @@ const firstBeverage = document.querySelector('.beverage');
 
 let count = 1;
 
-
+setupTextarea(firstBeverage);
 addRemoveButton(firstBeverage);
 addButton.addEventListener('click', () =>
 {
@@ -37,85 +37,135 @@ addButton.addEventListener('click', () =>
         }
     });
 
+    const textarea = newBeverage.querySelector('.extra-text');
+    const preview = newBeverage.querySelector('.extra-preview');
+
+    textarea.value = '';
+    preview.innerHTML = '';
+
+    setupTextarea(newBeverage);
+
     addRemoveButton(newBeverage);
     form.insertBefore(newBeverage, addButton.parentElement);
 });
 
 
-function updateNumbers() {
-  const beverages = document.querySelectorAll('.beverage');
-
-  beverages.forEach((bev, index) => {
-    const title = bev.querySelector('.beverage-count');
-    title.textContent = `Напиток №${index + 1}`;
-  });
-}
-
-
-function addRemoveButton(beverage) {
-  const removeBtn = document.createElement('button');
-  removeBtn.type = 'button';
-  removeBtn.textContent = '✖';
-  removeBtn.classList.add('remove-button');
-
-  removeBtn.style.position = 'absolute';
-  removeBtn.style.top = '10px';
-  removeBtn.style.right = '10px';
-
-  beverage.style.position = 'relative';
-
-  removeBtn.addEventListener('click', () => {
+function updateNumbers()
+{
     const beverages = document.querySelectorAll('.beverage');
 
-    if (beverages.length === 1) return;
-
-    beverage.remove();
-    count--;
-
-    updateNumbers();
-  });
-
-  beverage.appendChild(removeBtn);
+    beverages.forEach((bev, index) =>
+    {
+        const title = bev.querySelector('.beverage-count');
+        title.textContent = `Напиток №${index + 1}`;
+    });
 }
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  createModal();
+
+function addRemoveButton(beverage)
+{
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.textContent = '✖';
+    removeBtn.classList.add('remove-button');
+
+    removeBtn.style.position = 'absolute';
+    removeBtn.style.top = '10px';
+    removeBtn.style.right = '10px';
+
+    beverage.style.position = 'relative';
+
+    removeBtn.addEventListener('click', () =>
+    {
+        const beverages = document.querySelectorAll('.beverage');
+
+        if (beverages.length === 1) return;
+
+        beverage.remove();
+        count--;
+
+        updateNumbers();
+    });
+
+    beverage.appendChild(removeBtn);
+}
+
+form.addEventListener('submit', (e) =>
+{
+    e.preventDefault();
+    createModal();
 });
 
 
-function createModal() {
-  const overlay = document.createElement('div');
-  overlay.classList.add('modal-overlay');
+function createModal()
+{
+    const overlay = document.createElement('div');
+    overlay.classList.add('modal-overlay');
 
-  const modal = document.createElement('div');
-  modal.classList.add('modal');
+    const modal = document.createElement('div');
+    modal.classList.add('modal');
 
-  const closeBtn = document.createElement('button');
-  closeBtn.textContent = '✖';
-  closeBtn.classList.add('modal-close');
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✖';
+    closeBtn.classList.add('modal-close');
 
-  const text = document.createElement('p');
-  text.textContent = `Вы заказали ${count} ${getDrinkWord(count)}`;
+    const text = document.createElement('p');
+    text.textContent = `Вы заказали ${count} ${getDrinkWord(count)}`;
 
-  modal.appendChild(closeBtn);
-  modal.appendChild(text);
-  overlay.appendChild(modal);
+    modal.appendChild(closeBtn);
+    modal.appendChild(text);
+    overlay.appendChild(modal);
 
-  document.body.appendChild(overlay);
+    document.body.appendChild(overlay);
 
-  closeBtn.addEventListener('click', () => overlay.remove());
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.remove();
-  });
+    closeBtn.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) =>
+    {
+        if (e.target === overlay) overlay.remove();
+    });
 }
 
-function getDrinkWord(count) {
-  const mod10 = count % 10;
-  const mod100 = count % 100;
+function getDrinkWord(count)
+{
+    const mod10 = count % 10;
+    const mod100 = count % 100;
 
-  if (mod100 >= 11 && mod100 <= 14) return 'напитков';
-  if (mod10 === 1) return 'напиток';
-  if (mod10 >= 2 && mod10 <= 4) return 'напитка';
-  return 'напитков';
+    if (mod100 >= 11 && mod100 <= 14) return 'напитков';
+    if (mod10 === 1) return 'напиток';
+    if (mod10 >= 2 && mod10 <= 4) return 'напитка';
+    return 'напитков';
+}
+
+
+function highlightWords(text)
+{
+    const words = [
+        'побыстрее',
+        'поскорее',
+        'очень нужно',
+        'срочно',
+        'быстрее',
+        'скорее',
+    ];
+
+    let result = text;
+
+    words.forEach(word =>
+    {
+        const regex = new RegExp(`(${word})`, 'gi');
+        result = result.replace(regex, '<b>$1</b>');
+    });
+
+    return result;
+}
+
+function setupTextarea(beverage)
+{
+    const textarea = beverage.querySelector('.extra-text');
+    const preview = beverage.querySelector('.extra-preview');
+
+    textarea.addEventListener('input', () =>
+    {
+        preview.innerHTML = highlightWords(textarea.value);
+    });
 }

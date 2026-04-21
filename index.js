@@ -118,11 +118,27 @@ function createModal()
   let info = getAllFieldsData();
   console.log(info)
   const table = document.createElement('table')
+
+  const head = document.createElement("thead")
+  const headrow = document.createElement("tr")
+  const headname = document.createElement("th")
+  headname.textContent = "Название"
+  headrow.appendChild(headname)
+
+  const headmilt = document.createElement("th")
+  headmilt.textContent = "Молоко"
+  headrow.appendChild(headmilt)
+  const headdops = document.createElement("th")
+  headdops.textContent = "Добавки"
+  headrow.appendChild(headdops)
+  head.appendChild(headrow)
+  table.appendChild(head)
+
   for (let i = 0; i < info.length; i++) {
     const row = document.createElement("tr")
 
     const name = document.createElement("td")
-    name.textContent = info[i].номер
+    name.textContent = info[i].напиток.название
 
     const milk = document.createElement("td")
     milk.textContent = info[i].молоко.значение

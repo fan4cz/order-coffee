@@ -4,6 +4,8 @@ const firstBeverage = document.querySelector('.beverage');
 
 let count = 1;
 
+
+addRemoveButton(firstBeverage);
 addButton.addEventListener('click', () =>
 {
     count++;
@@ -25,7 +27,6 @@ addButton.addEventListener('click', () =>
     {
         if (input.type === 'radio')
         {
-            // Делаем уникальные name для каждой формы
             input.name = `milk-${count}`;
             input.checked = input.value === 'usual';
         }
@@ -35,5 +36,76 @@ addButton.addEventListener('click', () =>
             input.checked = false;
         }
     });
+
+    addRemoveButton(newBeverage);
     form.insertBefore(newBeverage, addButton.parentElement);
 });
+
+
+function updateNumbers() {
+  const beverages = document.querySelectorAll('.beverage');
+
+  beverages.forEach((bev, index) => {
+    const title = bev.querySelector('.beverage-count');
+    title.textContent = `Напиток №${index + 1}`;
+  });
+}
+
+
+function addRemoveButton(beverage) {
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.textContent = '✖';
+  removeBtn.classList.add('remove-button');
+
+  removeBtn.style.position = 'absolute';
+  removeBtn.style.top = '10px';
+  removeBtn.style.right = '10px';
+
+  beverage.style.position = 'relative';
+
+  removeBtn.addEventListener('click', () => {
+    const beverages = document.querySelectorAll('.beverage');
+
+    if (beverages.length === 1) return;
+
+    beverage.remove();
+    count--;
+
+    updateNumbers();
+  });
+
+  beverage.appendChild(removeBtn);
+}
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  createModal();
+});
+
+
+function createModal() {
+  const overlay = document.createElement('div');
+  overlay.classList.add('modal-overlay');
+
+  const modal = document.createElement('div');
+  modal.classList.add('modal');
+
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✖';
+  closeBtn.classList.add('modal-close');
+
+  const text = document.createElement('p');
+  text.textContent = 'Заказ принят!';
+
+  modal.appendChild(closeBtn);
+  modal.appendChild(text);
+  overlay.appendChild(modal);
+
+  document.body.appendChild(overlay);
+
+  closeBtn.addEventListener('click', () => overlay.remove());
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+}

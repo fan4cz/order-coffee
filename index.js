@@ -78,6 +78,8 @@ function addRemoveButton(beverage) {
   beverage.appendChild(removeBtn);
 }
 
+
+
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   createModal();

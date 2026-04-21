@@ -141,12 +141,12 @@ function createModal()
     name.textContent = info[i].напиток.название
 
     const milk = document.createElement("td")
-    milk.textContent = info[i].молоко.значение
+    milk.textContent = info[i].молоко.название
 
     dob = "";
 
     for (const d of info[i].добавки) {
-      dob += ` ${d.значение}`;
+      dob += ` ${d.название}`;
     }
     
     const dobavki = document.createElement("td")
@@ -194,14 +194,16 @@ function getBeverageData(beverageFieldset) {
   const selectedMilk = beverageFieldset.querySelector('input[type="radio"]:checked');
   console.log(selectedMilk)
   const milkValue = selectedMilk ? selectedMilk.value : '';
-  const milkText = selectedMilk ? selectedMilk.nextElementSibling.textContent : '';
+  const milkText = selectedMilk
+  ? selectedMilk.parentElement.querySelector('span').textContent
+  : '';
   
   const selectedOptions = [];
   const checkboxes = beverageFieldset.querySelectorAll('input[name="options"]:checked');
   checkboxes.forEach(checkbox => {
     selectedOptions.push({
       value: checkbox.value,
-      text: checkbox.nextElementSibling.textContent.trim()
+      text: checkbox.parentElement.querySelector('span').textContent.trim()
     });
   });
   

@@ -96,7 +96,7 @@ function createModal() {
   closeBtn.classList.add('modal-close');
 
   const text = document.createElement('p');
-  text.textContent = 'Заказ принят!';
+  text.textContent = `Вы заказали ${count} ${getDrinkWord(count)}`;
 
   modal.appendChild(closeBtn);
   modal.appendChild(text);
@@ -108,4 +108,14 @@ function createModal() {
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) overlay.remove();
   });
+}
+
+function getDrinkWord(count) {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+
+  if (mod100 >= 11 && mod100 <= 14) return 'напитков';
+  if (mod10 === 1) return 'напиток';
+  if (mod10 >= 2 && mod10 <= 4) return 'напитка';
+  return 'напитков';
 }
